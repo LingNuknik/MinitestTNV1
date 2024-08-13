@@ -1,0 +1,47 @@
+﻿@model LoginModel
+
+
+
+<div class="row" style="background : #2B2B63">
+    <div class="col">
+
+        <div class="row">      
+            <div class="col-4"></div>
+            <div class="col-4">
+                <div class="border border-0 align-content-center" style="background : #FFFFFF; border-radius : 20px; margin-top: 300px; margin-bottom : 300px">
+                    <div class="">
+                        <div class="w-100 p-3">
+                            <form method="post">
+
+                                <div class="mb-3">
+                                    <label class="form-label">UserName</label>
+                                    <input type="text" class="form-control" asp-for="Username" aria-describedby="emailHelp">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" asp-for="Password">
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" asp-for="RememberMe">
+                                    <label class="form-check-label">Remember Me</label>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">Sign In</button>
+                                    <a class="btn btn-primary" asp-controller="Account" asp-action="Register">Register</a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4"></div>
+
+    </div>
+</div>
+

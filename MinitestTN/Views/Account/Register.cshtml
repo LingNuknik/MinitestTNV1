@@ -1,0 +1,50 @@
+﻿    @model RegistrationModel
+
+
+<body class="">
+    <div class="container-fluid">
+        <div class="row vertical-center">
+            <form method="post" class="col-6">
+                <h1>Register</h1>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" placeholder="FirstName" required autofocus asp-for="FirstName">
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" placeholder="LastName" required asp-for="LastName">
+                        <span class="text-danger" asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" placeholder="PhoneNumber" required asp-for="PhoneNumber">
+                        <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="Email" placeholder="Email" required asp-for="Email">
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" placeholder="Username" required asp-for="Username">
+                        <span class="text-danger" asp-validation-for="Username"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <input class="form-control" type="password" placeholder="Password" required asp-for="Password">
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="sumbit">Register</button>
+            </form>
+        </div>
+    </div>
+</body>

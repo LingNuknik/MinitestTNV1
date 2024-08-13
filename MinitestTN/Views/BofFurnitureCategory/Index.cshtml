@@ -1,0 +1,361 @@
+﻿@model DataAccess.Entities.Category
+@{
+    ViewData["Title"] = "Category";
+
+    Layout = "~/Views/Shared/_BofLayout.cshtml";
+    string path = Url.Content("~/Category/");
+}
+
+<style>
+    .modal-dialog .modal-content {
+        border-radius: 20px;
+    }
+
+    .modal-backdrop.show {
+        background-color: white;
+    }
+
+</style>
+
+<h3 class="text-center">@ViewData["Title"]</h3>
+
+
+<div class="row section-search">
+    <div class="col-md-3 mb-1">
+        <div class="input-group ">
+            <input type="text" id="Keyword" class="form-control" placeholder="Keyword" />
+            <a onclick="onSearch()" class="btn btn-outline-secondary"><i class="fa fa-search"></i></a>
+        </div>
+    </div>
+    <div class="col-md-8"></div>
+    <div class="col-md-1 text-end">
+        <a onclick="modalAdd()" class="btn btn-success"><i class="fa fa-plus"></i></a>
+    </div>
+</div>
+
+
+
+
+<table class="table table-striped" id="dt1" style="width: 100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Ranking</th>
+            <th>Active</th>
+            <th>Save By</th>
+            <th>Save Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+<div class="modal" tabindex="-1" id="modal1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form1">
+                    <input type="hidden" id="Id" />
+                   
+                  @*   <div class="row mb-2">
+                        <div class="col-lg-12">
+                            <input type="file" asp-for="Image" class="dropify"  data-default-file="" data-max-file-size="2M" data-allowed-file-extensions="jpg png webp jpag" />
+                            <small class="form-text text-muted">RecommendSize 100 pxWidth</small>
+                        </div>
+                    </div> *@
+
+                    <div class="row mb-2">
+                        <div class="col-lg-12">
+                            <label>Image</label>
+                            <div><img id="img" class="rounded mb-1" style="width: 120px"></div>
+                            <input type="file" id="Image" class="form-control" asp-for="Image" accept="image/*" />
+                        </div>
+                    </div>
+
+                 
+
+                    <div class="row mb-2">
+                        <div class="col-lg-12">
+                            <label class="form-label">Name</label>
+                            <input type="text" asp-for="Name" class="form-control" maxlength="250" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-12">
+                            <label class="form-label">Ranking</label>
+                            <input type="number" asp-for="Ranking" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-lg-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" asp-for="IsActive">
+                                <label class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="">Close</button>
+                <button id="btnSave" type="button" class="btn btn-success" style="">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+
+
+        const modal1 = new bootstrap.Modal('#modal1', {
+        })
+
+        let validator = $("#form1").validate();
+
+        $(function () {
+            new DataTable("#dt1", {
+                displayLength: 20,
+                filter: false,
+                lengthChange: false,
+                processing: true,
+                serverSide: true,
+                order: [],
+                ajax: {
+                    url: "@Url.Action("GetAll", "BofFurnitureCategory")",
+                    data: function (d) {
+                        d.orderName = d.order[0] != undefined ? d.columns[d.order[0].column].data : '';
+                        d.orderType = d.order[0] != undefined ? d.order[0].dir : '';
+                        d.Name = $.trim($("#Keyword").val())
+                    }
+                },
+                columns: [
+                    { data: "Id", sortable: false, className: 'text-center', },
+                    {
+                        data: "Image",
+                        className: 'text-center',
+                        sortable: false,
+                        render: function (o) {
+                            
+                            if (o != "")
+                                return "<img class='rounded' src='@path" + o + "' width='60'>"
+
+                            return "";
+                        }
+                    },
+                    { data: "Name", sortable: false, className: 'text-start' },
+                    { data: "Ranking", sortable: false, className: 'text-center', },
+                    {
+                        data: "IsActive",
+                        sortable: false,
+                        className: 'text-center',
+                        render: function (status) {
+                            return status ? "<i class='fa fa-check text-success'></i>" : "<i class='fa fa-ban text-danger'></i>";
+                        }
+                    },
+                    { data: "CreateBy", sortable: false, className: 'text-center', },
+                    {
+                        data: "CreateDate",
+                        sortable: false,
+                        className: 'text-center',
+                        render: function (dt) {
+                         
+                            return dt.toString('DD/MM/YYYY HH:mm');
+                        }
+                    },
+                    {
+                        data: null,
+                        sortable: false,
+                        className: 'text-nowrap',
+                        render: function (o) {
+                            let a = "<a onclick=\"modalEdit('" + o.Id + "')\" class='btn btn-warning'><i class='fa fa-edit text-white'></i></a>" + "&nbsp" +
+                                "<a onclick=\"del('" + o.Id + "','" + o.Name + "')\" class='btn btn-danger'><i class='fa fa-trash'></i></a>";
+                        
+                            return a
+                        
+                        }
+                    },
+                ]
+            })
+
+            
+
+            $(".section-search input").keypress(function (e) {
+                if (e.which == 13) {
+                    onSearch()
+                    return false
+                }
+            })
+
+            // $("#btnSave").click(function () {
+            //     if ($("#form1").valid()) {
+            //         save();
+            //     }
+            // });
+        })
+
+        onSearch = () => $("#dt1").DataTable().ajax.reload()
+
+        modalAdd = () => {
+            validator.resetForm()
+            // dropifyReset()
+            $("#modal1 input").val("")
+            $("#IsActive").prop("checked", true)
+            $("#img").removeAttr("src")
+            $("#modal1 h5").text("Add Category")
+            $("#btnSave").attr("onclick", "insert()").text("Create")
+
+            $.getJSON("@Url.Action("GetNextRanking", "BofFurnitureCategory")", {}, function (data) {
+                $("#Name").focus()
+                $("#Ranking").val(data)
+                modal1.show()
+
+            })
+           
+        }
+
+        insert = () => {
+            let data = new FormData()
+
+            data.append("Name", $("#Name").val())
+            data.append("Ranking", $("#Ranking").val())
+            data.append("IsActive", $("#IsActive").is(":checked"))
+
+            let file = $("#Image").prop("files")[0]
+            data.append("file1", file)
+
+            $.ajax("@Url.Action("Insert", "BofFurnitureCategory")", {
+                data: data,
+                method: 'post',
+                processData: false,
+                contentType: false,
+                cache: false
+            }).then(function (data) {
+                if (data.Success) {
+                    $("#dt1").DataTable().ajax.reload()
+                    modal1.hide()
+
+                    Swal.fire({
+                        title: "Saved Successfully !",
+                        icon: "success"
+                    })
+                    
+                } else {
+                    Swal.fire({
+                        title: data.Message,
+                        icon: "warning"
+                    })
+                }
+            })
+        }
+
+
+        modalEdit = id => {
+            validator.resetForm()
+
+            $.getJSON("@Url.Action("GetCatByID", "BofFurnitureCategory")", { id }, function (data) {
+
+                if (data.Image != null)
+                    $("#img").attr("src", "@path" + data.Image)
+                else
+                    $("#img").removeAttr("src")
+
+                $("#Id").val(data.Id)
+                $("#Name").val(data.Name)
+                $("#Ranking").val(data.Ranking).show()
+                $("#IsActive").prop("checked", data.IsActive)
+                $("#modal1 h5").text("Edit Category")
+                $("#btnSave").attr("onclick", "update('" + id + "', '" + data.Image + "')").text("Update")
+
+                modal1.show()
+            });
+        }
+
+        update = (id, img) => {
+
+            let data = new FormData()
+            data.append("Id", $("#Id").val())
+            data.append("Name", $("#Name").val())
+            data.append("Ranking", $("#Ranking").val())
+            data.append("IsActive", $("#IsActive").is(":checked"))
+            data.append("Image", img)
+
+            let file = $("#Image").prop("files")[0]
+            data.append("file1", file)
+
+            $.ajax("@Url.Action("UpdateCat", "BofFurnitureCategory")", {
+                data: data,
+                method: 'post',
+                processData: false,
+                contentType: false,
+                cache: false
+            }).then(function (data) {
+
+                alert(data.Success);
+                if (data.Success) {
+
+                    $("#dt1").DataTable().ajax.reload();
+                    modal1.hide()
+
+
+                    Swal.fire({
+                        title: "Saved Successfully !",
+                        icon: "success"
+                    })
+                   
+                } else {
+                    Swal.fire({
+                        title: data.Message,
+                        icon: "warning"
+                    })
+                }
+            })
+        }
+
+      
+
+        del = (id, key) => {
+            Swal.fire({
+                title: "Delete " + id + " ?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                cancelButtonColor: "#ccc",
+                confirmButtonText: "Delete"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("@Url.Action("Delete", "BofFurnitureCategory")", { id }, function (data) {
+                        if (data.Success) {
+
+                            $("#dt1").DataTable().ajax.reload();
+
+                            Swal.fire({
+                                title: "Deleted Successfully!",
+                                icon: "Success",
+                            })
+                           
+                        }
+                    })
+                }
+            })
+        }
+
+    
+
+
+
+    </script>
+}

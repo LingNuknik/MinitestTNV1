@@ -1,0 +1,25 @@
+﻿@using Course.Core.Models
+@model DataAccess.Entities.Category
+
+@{
+    ViewData["Title"] = "Category";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string path = Url.Content("~/Category/");
+
+    var DataCat = (getCategoryDTRes)ViewBag.DataCat;
+}
+
+@foreach (var n in DataCat.data)
+{
+    <div class="row mb-2">
+        <div class="col-lg-6">
+
+            <a asp-controller="Furniture" asp-action="Product" asp-route-id="@n.Id">
+                <img src=@path@n.Image class='rounded' style='width:60px'>
+                <label>@n.Name</label>
+                @* <i class="fa-solid fa-magnifying-glass"></i> *@
+            </a>
+        </div>
+    </div>
+}
