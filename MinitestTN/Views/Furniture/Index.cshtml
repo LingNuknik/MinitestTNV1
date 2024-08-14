@@ -10,16 +10,26 @@
     var DataCat = (getCategoryDTRes)ViewBag.DataCat;
 }
 
-@foreach (var n in DataCat.data)
-{
-    <div class="row mb-2">
-        <div class="col-lg-6">
-
-            <a asp-controller="Furniture" asp-action="Product" asp-route-id="@n.Id">
-                <img src=@path@n.Image class='rounded' style='width:60px'>
-                <label>@n.Name</label>
-                @* <i class="fa-solid fa-magnifying-glass"></i> *@
-            </a>
+<div id="main">
+    <div class="inner">
+        <header>
+            <h1 class="text-center">
+                @ViewData["Title"]
+            </h1>
+        </header><div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+            <div class="product-item-sm d-flex">
+        @foreach (var n in DataCat.data)
+        {
+                    <a asp-controller="Furniture" asp-action="Product" asp-route-id="@n.Id">
+                    <div class="thumbnail">
+                            <img src=@path@n.Image alt="Image" class="img-fluid" style='width:60px'> 
+                            <div class="pt-3">
+                                <h5>@n.Name</h5>
+                            </div>
+                        </div>
+                    </a>
+        }
+            </div>
         </div>
     </div>
-}
+</div>

@@ -6,8 +6,9 @@
     <title>@ViewData["Title"] Furniture</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/tiny-slider.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
 
@@ -39,9 +40,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Furniture" asp-action="Index"><b>Category</b></a>
                         </li>
 
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Furniture" asp-action="Product"><b>Product</b></a>
-                        </li>
+                        </li> *@
                     </ul>
 
                     <span class="navbar-text text-danger">@User.Identity.Name</span>
@@ -95,8 +96,10 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-
-
+    
+    <script src="~/js/tiny-slider.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/custom.js"></script>
 
     @await RenderSectionAsync("scripts", required: false)
 </body>

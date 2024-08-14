@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.Da
 {
@@ -19,30 +21,43 @@ namespace DataAccess.Da
             this.db = db;
         }
 
-        public async Task<ProductDT> GetById(int id)
+        public async Task<List<ProductDT>> GetByCategoryId(int CategoryId)
         {
+          
             var raw = from a in db.Products
                       join b in db.Category on a.CategoryId equals b.Id
-                      where !a.IsDelete && !b.IsDelete && a.Id == id
+                      where !a.IsDelete && !b.IsDelete && b.Id == CategoryId
                       select new ProductDT
                       {
-                          Id = a.Id,
-                          Name = a.Name,
-                          Image = a.Image,
-                          Ranking = a.Ranking,
-                          Price = a.Price,
-                          PriceNet = a.PriceNet,
-                          CategoryName = b.Name,
-                          CategoryId = a.CategoryId,
-                          Discount = a.Discount,
-                          IsActive = a.IsActive,
-                          CreateBy = a.UpdateBy == null ? a.CreateBy : a.UpdateBy,
-                          CreateDate = a.UpdateDate == null ? a.CreateDate : a.UpdateDate.Value
-
+                          
+                                   Id = a.Id,
+                                  Name = a.Name,
+                                  Image = a.Image,
+                                  Ranking = a.Ranking,
+                                  Price = a.Price,
+                                  PriceNet = a.PriceNet,
+                                  CategoryName = b.Name,
+                                  CategoryId = a.CategoryId,
+                                  Discount = a.Discount,
+                                  IsActive = a.IsActive,
+                                  CreateBy = a.UpdateBy == null ? a.CreateBy : a.UpdateBy,
+                                 CreateDate = a.UpdateDate == null ? a.CreateDate : a.UpdateDate.Value
                       };
 
+            List<ProductDT> pro = new List<ProductDT>();
+            foreach (var data in raw)
+            {
+                pro.Add(data);
+            }
 
-            return await raw.FirstOrDefaultAsync();
+
+
+            return pro;
+        }
+
+        public async Task<Products> GetById(int id)
+        {
+            return  db.Products.FirstOrDefault(wh => wh.Id == id);
         }
 
         public async Task Insert(Products req)

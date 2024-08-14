@@ -10,7 +10,8 @@ namespace DataAccess.Interfaces
 {
     public interface IProductDa
     {
-        Task<ProductDT> GetById(int id);
+        Task<Products> GetById(int id);
+        Task<List<ProductDT>> GetByCategoryId(int CategoryId);
         Task Insert(Products req);
         Task<Products> Update(Products data);
         Task<Products> Delete(int id, string user);

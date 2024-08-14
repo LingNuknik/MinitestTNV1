@@ -30,8 +30,12 @@ namespace MinitestTN.Controllers
             return View();
         }
 
-        public IActionResult Product()
+        public async Task<IActionResult> Product(int id)
         {
+            var res = await iProductDa.GetByCategoryId(id);
+            ViewBag.DataProduct = res;
+            ViewBag.CategoryName = res.FirstOrDefault().CategoryName;
+
             return View();
         }
 
